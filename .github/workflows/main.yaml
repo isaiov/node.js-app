@@ -1,23 +1,19 @@
-name: pipeline
+name: docker
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-
-  build:
+  docker:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: install deps
-        run: npm install
-        working-directory: ./src
+      - run: docker build -t isisa/nodejs-app -f build/Dockerfile .
 
-      - name: build docker
-        run: docker build -t test -f build/Dockerfile .
+      - run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-
+      - run: docker push isisa/nodejs-app
 
