@@ -1,39 +1,23 @@
-name: Node.js CI/CD Pipeline 🚀
+name: pipeline
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
-  build_and_test:
+
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-
-      - name: Install dependencies
+      - name: install deps
         run: npm install
+        working-directory: ./src
 
-      - name: Build application
-        run: npm run build
+      - name: build docker
+        run: docker build -t test -f build/Dockerfile .
 
-      - name: Run tests
-        run: npm test
 
-      - name: Publish artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: node-app
-          path: build
 
-  # This job could be extended for a 'deploy' stage, which runs after build_and
