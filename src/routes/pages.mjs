@@ -43,6 +43,9 @@ router.get('/info', function (req, res, next) {
     nodever: process.version,
     uptime: convertSeconds(os.uptime()),
     platform: os.platform(),
+    ip: Object.values(os.networkInterfaces())
+      .flat()
+      .find((i) => i.family === 'IPv4' && !i.internal)?.address || 'unknown',
   }
 
   const isKube = fs.existsSync('/var/run/secrets/kubernetes.io')
