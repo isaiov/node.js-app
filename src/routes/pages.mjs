@@ -42,6 +42,7 @@ router.get('/info', function (req, res, next) {
     env: process.env.WEBSITE_SITE_NAME ? process.env.WEBSITE_SITE_NAME.split('-')[0] : 'Local',
     nodever: process.version,
     uptime: convertSeconds(os.uptime()),
+    platform: os.platform(),
   }
 
   const isKube = fs.existsSync('/var/run/secrets/kubernetes.io')
